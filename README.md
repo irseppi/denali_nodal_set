@@ -32,4 +32,4 @@ Currently the planes data is from opensky, a volunteer run database of locations
 
 ### Getting data from OpenSky
 
-First Carl Taipe applied for data access from <https://opensky-network.org/> and then the data was scraped from the provided sql database. I then wrote a parser in rust inorder to put the data into a sqllite database. The parser was written in rust because python would not be performant enough to parse the data in a timely manner. 
+First Carl Tape applied for data access from <https://opensky-network.org/> and then the data was scraped from the provided sql database. I then wrote a parser in rust inorder to put the data into a sqllite database. The parser was written in rust because python would not be performant enough to parse the data in a timely manner. 
