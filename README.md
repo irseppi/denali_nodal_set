@@ -1,6 +1,16 @@
 # Denali Nodal Set Data
 This repository contains code used to look at the denali nodal set and attempt to find planes in the sismic signals.
 
+## Introduction
+
+## Plane Data
+
+## Downloading Earthquake Data
+
+## Analyzing Earthquake Data
+
+## Possible Future Directions
+
 ## Code Orginization
 
 Most of the code is contained inside of jupyter notebooks aside from prelude.py which contains shared functions usefull for looking at the data.
