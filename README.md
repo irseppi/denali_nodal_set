@@ -10,17 +10,17 @@ Between 2019-02-11 and 2019-03-26 a set of about 400 Fairfield Nodal 3C 5Hz sens
 
 The goal of this project was to download and analyze the Denali Nodal waveforms, with the long-term objective of characterizing the wide range of recorded signals, including from earthquakes, planes, trains, and automobiles. Of particular interest are signals from planes, which have been shown to generate signals on the same type of ground-installed seismometers (Meng and Ben-Zion, 2018). The basic idea is that as a plane flies overhead, the recorded signal on the ground will exhibit a Doppler shift in the frequency-time space, with (apparent) higher frequencies occurring as the plane approaches the seismometer and (apparent) lower frequencies as the plane flies away from the seismometer. A theoretical example Doppler shift is shown below:
 
-XXXX
+![doplar](assets/doplar.png)
 
 The preliminary work on this project was conducted on the LuNGS computer network of the Geophysical Institute at UAF. This repository contains a record of the work performed, and it should enable a future expanded effort to characterize the signals recorded by the Denali Nodal deployment.
 
-![doplar](assets/doplar.png)
+
 
 The project is far from being completed however there has been some usefull work done. The Denali Nodal Set has been downloaded to the GI's Lungs computers and tools for viewing and analyzing the dataset have been developed.
 
 ## Downloading the Denali Nodal Set Data
 
-The Denali Nodal set was downloaded from IRIS's PH5 archive using obspy. There was a bug in either obspy or in IRIS so the fast mass downloader could not be used. I wrote a customized downloader that saves which files were downloaded and some associated metadata into a sqlite3 database. The script runs very slowly on the GI's Lungs machines likely due to a network bottleneck. The script also supports being stopped and resumed at its stopping point if needed. The total size of the download was 1.8 Tb and it took roughly two weeks to downolad the data.
+The Denali Nodal set was downloaded from IRIS's PH5 archive using obspy. There was a bug in either obspy or in IRIS so the fast mass downloader could not be used. I wrote a customized downloader that saves which files were downloaded and some associated metadata into a sqlite3 database. The script runs very slowly on the GI's Lungs machines likely due to a network bottleneck. The script also supports being stopped and resumed at its stopping point if needed. The total size of the download was 1.8 Tb and it took roughly two weeks to downolad the data. The download script can be found at [download_gaps.py](download_gaps.py).
 
 ## Analyzing Earthquake Data
 
