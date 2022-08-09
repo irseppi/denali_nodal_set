@@ -1,4 +1,4 @@
-name: nodal_env 
+name: denalinodal
 channels:
   - conda-forge
   - defaults
@@ -10,5 +10,3 @@ dependencies:
   - cartopy=0.20
   - scipy=1.9.0 
   - tqdm=4.64.0
-  
-prefix: /home/naalexeev/.conda/envs/conda_env

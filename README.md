@@ -42,6 +42,13 @@ Another flight databse exists but it is expensive, <https://www.flightradar24.co
 Most of the code is contained inside jupyter notebooks aside from prelude.py which contains shared functions usefull for looking at the data.
 
 ## Environment
+Inorder to use this project, in terminal run 
+
+```conda env create environment.yml```
+
+Next run 
+
+```conda activate denalinodal```
 
 The code uses the following packages, inorder to run the code install the latest version of each of the packages
 
