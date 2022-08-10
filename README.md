@@ -60,6 +60,13 @@ Next run
 
 ```conda activate denalinodal```
 
+Most of the codes are in the jupyter notebooks so inorder to view the notebooks run
+
+```
+jupyter-lab
+```
+
+A browser window should open up with the notebooks and click on the desired notebook.
 The code uses the following packages, inorder to run the code install the latest version of each of the packages
 
 - obspy for reading sismic data
