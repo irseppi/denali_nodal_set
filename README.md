@@ -42,7 +42,17 @@ Another flight databse exists but it is expensive, <https://www.flightradar24.co
 Most of the code is contained inside jupyter notebooks aside from prelude.py which contains shared functions usefull for looking at the data.
 
 ## Environment
-Inorder to use this project, in terminal run 
+Inorder to use this project, in terminal first clone this repo with
+
+```git clone https://github.com/scifi6546/denali_nodal_set.git```
+
+or even better fork this repo so that changes can be pushed.
+
+Next,
+
+```cd denali_nodal_set```
+
+Next create the conda environment and install dependencies by running
 
 ```conda env create environment.yml```
 
