@@ -6,7 +6,11 @@
 Summarry of research undertaken between May 2022 and June 2022.
 ## Introduction
 
-Between 2019-02-11 and 2019-03-26 a set of about 400 Fairfield Nodal 3C 5Hz sensors were deployed along the Parks Highway in south-central Alaska between the towns of Nenana (north) and Trapper Creek (south). A map of these can be found from the [FDSN network page](http://ds.iris.edu/gmap/#network=ZE&maxlat=64.8752&maxlon=-147.5002&minlat=62.227&minlon=-151.5871&drawingmode=box&planet=earth). We refer to the deployment as "Denali Nodal" because the stations span the east-west trending Denali fault and because the sensors are made by Nodal.
+Between 2019-02-11 and 2019-03-26 a set of about 400 Fairfield Nodal 3C 5Hz sensors were deployed along the Parks Highway in south-central Alaska between the towns of Nenana (north) and Trapper Creek (south). A map of these can be found from the [FDSN network page](http://ds.iris.edu/gmap/#network=ZE&maxlat=64.8752&maxlon=-147.5002&minlat=62.227&minlon=-151.5871&drawingmode=box&planet=earth). The stations are also shown below in green.
+
+![stations](assets/stations.png)
+
+We refer to the deployment as "Denali Nodal" because the stations span the east-west trending Denali fault and because the sensors are made by Nodal.
 
 The goal of this project was to download and analyze the Denali Nodal waveforms, with the long-term objective of characterizing the wide range of recorded signals, including from earthquakes, planes, trains, and automobiles. Of particular interest are signals from planes, which have been shown to generate signals on the same type of ground-installed seismometers (Meng and Ben-Zion, 2018). The basic idea is that as a plane flies overhead, the recorded signal on the ground will exhibit a Doppler shift in the frequency-time space, with (apparent) higher frequencies occurring as the plane approaches the seismometer and (apparent) lower frequencies as the plane flies away from the seismometer. A theoretical example Doppler shift is shown below:
 
@@ -25,7 +29,8 @@ The Denali Nodal set was downloaded from IRIS's PH5 archive using obspy. There w
 ## Analyzing Earthquake Data
 
 Tools were developed inorder to effectivly analyze the Denali Nodal Set. The work heavily uses obspy for reading seismic data and performing various analysis of the data. The codes used can be found in `prelude.py`. Most of the work was developing tools inorder to stitch out the correct data from the dataset as the file sizes used were very large and it was very easy to fill up the computers ram if naive techniques were used to load data. Therefore, I developed tools that only loaded the data that was requested. Plotting tools were also developed. Most notably a tool was developed inorder to plot spectrograms from several stations at once. This tool is useful because it makes it easier to see move out in suspicious signals across several stations. An example plot is shown below.
-![spectrogram](assets/example_spec.png)
+
+![spectrogram](assets/spectrogram.png)
 ## Planes Data
 
 Currently, the planes data is from opensky, a volunteer run database of locations of planes based on listing to plane transponders. This data only covers a region over Anchorage. First Carl Tape applied for data access from <https://opensky-network.org/> and then the data was scraped from the provided sql database. I then wrote a parser in rust inorder to put the data into a sqllite database. The parser was written in rust because python would not be performant enough to parse the data in a timely manner. 
