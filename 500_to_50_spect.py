@@ -9,7 +9,7 @@ from prelude import *
 
 faulthandler.enable()
 tr = obspy.read("/home/irseppi/nodal_data/500sps/2019_02_11/ZE_1001_DPZ.msd")
-tr_new = obspy.read("/home/irseppi/nodal_data/500sps/2019_02_11/ZE_1001_DPZ.msd")
+tr_new = obspy.read("/home/irseppi/nodal_data/50sps/2019_02_11/ZE_1001_DPZ.msd")
 
 fig1, ax1 = plt.subplots()
 fig1.set_figwidth(100.0)
