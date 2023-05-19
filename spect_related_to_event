@@ -1,0 +1,19 @@
+%matplotlib inline
+import faulthandler
+import numpy as np
+import matplotlib.pyplot as plt
+import obspy 
+
+from obspy.signal.filter import bandpass
+from prelude import *
+
+faulthandler.enable()
+
+tr = obspy.read("/scratch/naalexeev/NODAL/2019-02-22T19:00:00.000000Z.2019-02-22T20:00:00.000000Z.1247.mseed")
+
+fig1, ax1 = plt.subplots()
+fig1.set_figwidth(100.0)
+fig1.set_figheight(30.0)
+ax1.set_xlim([0, 3500])
+tr.spectrogram(axes = ax1,dbscale=True)
+plt.show()
