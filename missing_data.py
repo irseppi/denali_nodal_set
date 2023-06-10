@@ -4,8 +4,12 @@ from obspy.clients.fdsn import Client
 from obspy.core import UTCDateTime
 
 # Define the parameters
+#Using PH5ws for 02/13, 02/20, 02/23, and 03/01
 network = "ZE"
-day = "2019-02-23"
+day = "2019-02-13"
+#day = "2019-02-20"
+#day = "2019-02-23"
+#day = "2019-03-01"
 report_number = "19-007"
 client = Client("http://service.iris.edu/ph5ws/", service_mappings={
     "dataselect": "http://service.iris.edu/ph5ws/dataselect/1",
