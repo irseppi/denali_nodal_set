@@ -49,13 +49,13 @@ def compare_lists(list1, list2):
 
       # Calculate the distance between the two points
       dist = distance(lat1, lon1, lat2, lon2)
-
+      
       # Update the minimum distance and the index numbers if the current distance is smaller than the previous minimum distance
       if dist < min_dist:
         min_dist = dist
         index1 = i
         index2 = j
-
+        print('local min:', min_dist, 'km - ZE_NODAL index:', i, list1[i], 'Alaska_Railroad index:', j, list2[j])
   # Return the index numbers of the two points with the shortest distance
   return index1, index2, min_dist
 
@@ -86,14 +86,13 @@ gdf2['lon'] = gdf2[0]
 gdf2['lat'] = gdf2[1]
 
 # Extract the coordinates as arrays
-P1 = [gdf1['lat'].to_numpy(),gdf1['lon'].to_numpy()]
-P2 = [gdf2['lat'].to_numpy(),gdf2['lon'].to_numpy()]
+P1 = np.array([gdf1['lat'].to_numpy(),gdf1['lon'].to_numpy()])
+P2 = np.array([gdf2['lat'].to_numpy(),gdf2['lon'].to_numpy()])
 
-print("P1=\n",P1)
-print("P2=\n",P2)
-
-
+P1=P1.T
+P2=P2.T
 # Call the function and print the result
 result = compare_lists(P1, P2)
 print(result)
 
+print(f'The shortest distance is {result[2]:.3f} km between point {result[0]:.3f} in ZE_NODAL.kml and point {result[1]:.3f} in Alaska_Railroad.kml.')
