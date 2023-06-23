@@ -31,21 +31,29 @@ def distance(lat1, lon1, lat2, lon2):
 # Define a function to take two different size lists of lat and lon values and compare each set of lat and lon values to all the lat and lon values in the other list and then find the shortest distance between those two points and return their index numbers
 def compare_lists(list1, list2):
   # Initialize the minimum distance and the index numbers
- 
+  color=[]
   index1 = -1
   index2 = -1
+  
+  fig = pygmt.Figure()
+  fig.basemap(region=[-151,-148, 62.2, 64.6], projection="M20c", frame="a")
+  fig.coast(land="white", water="skyblue")
+  fig.plot(data ='Alaska_Railroad.txt', style="c0.1c", fill='black', label='Train Tracks', connection='f')
+  my_labels = {'red' : '> 5km from track', 'orange' : '> 4km from track (< 5km)', 'yellow' : '> 3km from track (< 4km)', 'green' : '> 2km from track (< 3km)', 'blue' : '> 1km from track (< 2km)', 'purple' : '< 1km from track'}
+  
   # Loop through the first list
-  for i in range(79,len(list1)):
+  for i in range(0,302):
     # Get the latitude and longitude of the current point in the first list
     lat1 = list1[i][0]
     lon1 = list1[i][1]
     min_dist = float("inf")
+    
     # Loop through the second list
     for j in range(len(list2)):
       # Get the latitude and longitude of the current point in the second list
       lat2 = list2[j][0]
       lon2 = list2[j][1]
-
+      
       # Calculate the distance between the two points
       dist = distance(lat1, lon1, lat2, lon2)
       
@@ -54,26 +62,34 @@ def compare_lists(list1, list2):
         min_dist = dist
         index1 = i
         index2 = j
+       
     print(min_dist, 'km - ZE_NODAL index:', i, gdf1["Name"][i], list1[i])
+    
     if min_dist > 5:
-      color='blue'
+      color='red'
+      l='> 5km from track'
     if min_dist > 4 and min_dist < 5:
       color='orange'
+      l='> 4km from track (< 5km)'
     if min_dist > 3 and min_dist < 4:
-      color='red'
-    if min_dist > 2 and min_dist < 3:
       color='yellow'
-    if min_dist > 1 and min_dist < 2:
+      l='> 3km from track (< 4km)'
+    if min_dist > 2 and min_dist < 3:
       color='green'
+      l='> 2km from track (< 3km)'
+    if min_dist > 1 and min_dist < 2:
+      color='blue'
+      l='> 1km from track (< 2km)'
     if min_dist > 0 and min_dist < 1:
       color='purple'
-    plt.rcParams["figure.figsize"] = (200,10)
-    plt.scatter(gdf1["Name"][i], min_dist, c=color)
-    plt.xticks(rotation = 90)
-    plt.ylabel("Distance to Tracks (km)")
-    plt.xlabel("Nodal Stations")
-  plt.show()
+      l='< 1km from track'
+      
+    fig.plot(x=list1[i][1], y=list1[i][0], style="c0.1c", fill=color, label=my_labels[color])
+    my_labels[color] = None
 
+  fig.legend()
+  fig.show()
+  
 # Return the index numbers of the two points with the shortest distance
   return index1, index2, min_dist
 
@@ -87,7 +103,7 @@ geo_df2 = pd.read_csv('Alaska_Railroad.txt', sep=r"\s{2,}", engine="python", hea
 # Create Pandas Dataframe from GeoPandas 
 df1= pd.DataFrame(geo_df1)
 df2= pd.DataFrame(geo_df2)
-print(df1)
+
 # Create GeoDataframe from GeoPandas
 gdf1 = GeoDataFrame(df1) 
 gdf2 = GeoDataFrame(df2)
@@ -109,6 +125,7 @@ P2 = np.array([gdf2['lat'].to_numpy(),gdf2['lon'].to_numpy()])
 
 P1=P1.T
 P2=P2.T
+
 # Call the function and print the result
 result = compare_lists(P1, P2)
 print(result)
