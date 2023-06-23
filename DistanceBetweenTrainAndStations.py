@@ -10,7 +10,7 @@ from shapely.geometry import Point
 from geopandas import GeoDataFrame
 import matplotlib.pyplot as plt
 import math
-
+import pygmt
 
 # Define a function to calculate the distance between two points given their latitudes and longitudes
 def distance(lat1, lon1, lat2, lon2):
@@ -31,16 +31,15 @@ def distance(lat1, lon1, lat2, lon2):
 # Define a function to take two different size lists of lat and lon values and compare each set of lat and lon values to all the lat and lon values in the other list and then find the shortest distance between those two points and return their index numbers
 def compare_lists(list1, list2):
   # Initialize the minimum distance and the index numbers
-  min_dist = float("inf")
+ 
   index1 = -1
   index2 = -1
-
   # Loop through the first list
-  for i in range(len(list1)):
+  for i in range(79,len(list1)):
     # Get the latitude and longitude of the current point in the first list
     lat1 = list1[i][0]
     lon1 = list1[i][1]
-
+    min_dist = float("inf")
     # Loop through the second list
     for j in range(len(list2)):
       # Get the latitude and longitude of the current point in the second list
@@ -51,12 +50,31 @@ def compare_lists(list1, list2):
       dist = distance(lat1, lon1, lat2, lon2)
       
       # Update the minimum distance and the index numbers if the current distance is smaller than the previous minimum distance
-      if dist < min_dist:
+      if dist < min_dist and i>1:
         min_dist = dist
         index1 = i
         index2 = j
-        print('local min:', min_dist, 'km - ZE_NODAL index:', i, list1[i], 'Alaska_Railroad index:', j, list2[j])
-  # Return the index numbers of the two points with the shortest distance
+    print(min_dist, 'km - ZE_NODAL index:', i, gdf1["Name"][i], list1[i])
+    if min_dist > 5:
+      color='blue'
+    if min_dist > 4 and min_dist < 5:
+      color='orange'
+    if min_dist > 3 and min_dist < 4:
+      color='red'
+    if min_dist > 2 and min_dist < 3:
+      color='yellow'
+    if min_dist > 1 and min_dist < 2:
+      color='green'
+    if min_dist > 0 and min_dist < 1:
+      color='purple'
+    plt.rcParams["figure.figsize"] = (200,10)
+    plt.scatter(gdf1["Name"][i], min_dist, c=color)
+    plt.xticks(rotation = 90)
+    plt.ylabel("Distance to Tracks (km)")
+    plt.xlabel("Nodal Stations")
+  plt.show()
+
+# Return the index numbers of the two points with the shortest distance
   return index1, index2, min_dist
 
 # IMPORT KML DRIVER
@@ -69,7 +87,7 @@ geo_df2 = pd.read_csv('Alaska_Railroad.txt', sep=r"\s{2,}", engine="python", hea
 # Create Pandas Dataframe from GeoPandas 
 df1= pd.DataFrame(geo_df1)
 df2= pd.DataFrame(geo_df2)
-
+print(df1)
 # Create GeoDataframe from GeoPandas
 gdf1 = GeoDataFrame(df1) 
 gdf2 = GeoDataFrame(df2)
@@ -96,3 +114,4 @@ result = compare_lists(P1, P2)
 print(result)
 
 print(f'The shortest distance is {result[2]:.3f} km between point {result[0]:.3f} in ZE_NODAL.kml and point {result[1]:.3f} in Alaska_Railroad.kml.')
+
