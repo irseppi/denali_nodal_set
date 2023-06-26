@@ -1,3 +1,4 @@
+#after converting 3 Parks Highway kml(https://dot.alaska.gov/stwddes/gis/transdata/GE_Files/Alaska_DOTPF_RoadSystem_081114.kml) files to text files reformat to be just lat and lon
 import sys
 import fileinput
 
