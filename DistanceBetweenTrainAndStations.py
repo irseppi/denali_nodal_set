@@ -63,7 +63,12 @@ def compare_lists(list1, list2):
         index1 = i
         index2 = j
        
-    print(min_dist, 'km - ZE_NODAL index:', i, gdf1["Name"][i], list1[i])
+    #Print distaces at certain station to the given (closest) track lat/lon
+    n = str(gdf1["Name"][i])
+    nr = n.replace('ZE.', '')
+    nr = nr.replace(' - 1', ' ')
+    n = nr.split(" ")
+    print(n[0],"-", round(min_dist, 4), "km", list1[i])
     
     if min_dist > 5:
       color='red'
