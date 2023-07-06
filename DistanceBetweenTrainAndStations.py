@@ -134,6 +134,7 @@ P2=P2.T
 # Call the function and print the result
 result = compare_lists(P1, P2)
 print(result)
-
+i=result[0]
+print('Station:',gdf1["Name"][i])
 print(f'The shortest distance is {result[2]:.3f} km between point {result[0]:.3f} in ZE_NODAL.kml and point {result[1]:.3f} in Alaska_Railroad.kml.')
 
