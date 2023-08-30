@@ -5,19 +5,19 @@ import numpy as np
 import obspy
 from obspy.core import UTCDateTime
 import datetime
+from datetime import datetime, timedelta
+import pytz
 
 # open file in read mode
-text = open("nodal_arr.arrival", "r")
+text = open("nodal_ZE.arrival", "r")
 
 day_data=[]	
 night_data=[]
+num = 0
 
 for line in text.readlines():
 	val = line.split()
-	# compare each station where arrival occured
 	timestamps = UTCDateTime(float(val[1]))
-	#print(timestamps)
-
 
 	for x in range(11,29):
 
@@ -27,15 +27,13 @@ for line in text.readlines():
 			day_end = UTCDateTime("2019-02-"+str(x)+"T08:08:00")
 			night_start = UTCDateTime("2019-02-"+str(x)+"T08:00:00")
 			night_end = UTCDateTime("2019-02-"+str(x)+"T15:00:00")
+
 			# Filter the data to only include the day and night periods
 			if day_start <= timestamps < day_end:
 				day_data.append(timestamps)
 			if night_start <= timestamps < night_end:
 				night_data.append(timestamps)
-		
 
-
-		
 	for y in range(2,27):
 		day_start = UTCDateTime("2019-03-"+str(y-1)+"T15:00:00")
 		day_end = UTCDateTime("2019-03-"+str(y)+"T08:00:00")
@@ -48,7 +46,6 @@ for line in text.readlines():
 		if night_start <= timestamps < night_end:
 			night_data.append(timestamps)
 
-	x = str(x)
 	day_start = UTCDateTime("2019-02-28T15:00:00")
 	day_end = UTCDateTime("2019-02-01T08:00:00")
 	night_start = UTCDateTime("2023-03-01T08:00:00")
@@ -57,6 +54,7 @@ for line in text.readlines():
 		day_data.append(timestamps)
 	if night_start <= str(timestamps) < night_end:
 		night_data.append(timestamps)	
+	num = num + 1
 
 # Calculate the arrival times for the day and night periods
 day_arrivals = len(day_data)
@@ -65,15 +63,29 @@ night_arrivals = len(night_data)
 # Compare the arrival times between day and night
 print("# of Day arrivals:", day_arrivals)
 print("# of Night arrivals:", night_arrivals)
-#print("Total # of picks",len(text.readlines()))
-#wc -l filename.arrivals in Linux
-#plot data as histogram
-fig, ax = plt.subplots()
+print("Total # of picks", num)
 
-ax.bar(day_arrivals, night_arrivals)
+# Convert UTCDateTime objects to datetime objects
+day_dates = [datetime.utcfromtimestamp(date.timestamp) for date in day_data]
+night_dates = [datetime.utcfromtimestamp(date.timestamp) for date in night_data]
 
-ax.set_ylabel('Number of Arrivals')
-ax.set_title('Number of Arrival Picks Night vs. Day')
-#ax.set_xticklabels(timestamps,rotation=45)
+# Define the local time zone
+local_tz = pytz.timezone('US/Alaska')
 
+# Convert UTC datetimes to local datetimes
+local_day = [local_tz.normalize(day_date.replace(tzinfo=pytz.utc).astimezone(local_tz)) for day_date in day_dates]
+local_night = [local_tz.normalize(night_date.replace(tzinfo=pytz.utc).astimezone(local_tz)) for night_date in night_dates]
+
+# Create histogram
+plt.hist(local_day, bins=43)
+plt.title('Day Time Arrival Count')
+plt.xlabel('Date')
+plt.ylabel('Count')
+#plt.xticks([UTCDateTime(day_dates).strftime("%Y-%m-%d") for date in range(min(night_dates), max(night_dates) + 2)], rotation=45)
+plt.show()
+
+plt.hist(local_night, bins=43)
+plt.title('Night Time Arrival Count')
+plt.xlabel('Date')
+plt.ylabel('Count')
 plt.show()
