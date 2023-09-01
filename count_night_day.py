@@ -1,8 +1,4 @@
-import sys
-import fileinput
 import matplotlib.pyplot as plt
-import numpy as np
-import obspy
 from obspy.core import UTCDateTime
 import datetime
 from datetime import datetime, timedelta
