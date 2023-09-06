@@ -26,14 +26,15 @@ dist = gps2dist_azimuth(63.982154, -149.121513, 63.98, -148.66)
 dist_km = dist[0]/1000
 print("B1:", dist_km)
 
-print("B2:", distance(63.982154, -149.121513, 64.01, -148.76))
-dist = gps2dist_azimuth(63.982154, -149.121513, 64.01, -148.76)
+print("B2:", distance(63.982154, -149.121513, 63.97, -148.68))
+dist = gps2dist_azimuth(63.982154, -149.121513, 63.97, -148.68)
 dist_km = dist[0]/1000
 print("B2:", dist_km)
 
 
-print("B3:", distance(63.982154, -149.121513, 63.97, -148.68))
-dist = gps2dist_azimuth(63.982154, -149.121513, 63.97, -148.68)
+print("B3:", distance(63.982154, -149.121513, 64.01, -148.76))
+dist = gps2dist_azimuth(63.982154, -149.121513, 64.01, -148.76)
 dist_km = dist[0]/1000
 print("B3:", dist_km) 
+
 
