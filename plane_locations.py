@@ -44,7 +44,11 @@ seismo_longitudes = seismo_data['Longitude']
 
 # Create a scatter plot for the seismometer locations
 plt.scatter(seismo_longitudes, seismo_latitudes, c='red', label='Seismometers')
-plt.text(seismo_longitudes, seismo_latitudes, seismo_data['Station'], fontsize=6)
+
+#Label stations
+for l in range(len(seismo_data)):
+	sta = seismo_data['Station']
+	plt.text(seismo_longitudes[l], seismo_latitudes[l], sta[l], fontsize=6)
 
 # Set labels and title
 plt.xlim(-150.5,-148.5)
