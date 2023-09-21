@@ -182,8 +182,10 @@ if apro =='y':
 							if s_epoch <= int(time[s]) <= e_epoch and min_lat <= flight_latitudes[s] <= max_lat and min_lon <= flight_longitudes[s] <= max_lon:
 								t = UTCDateTime(float(time[s]))
 								ht = datetime.datetime.fromtimestamp(time[s])
-								
 								h = ht.hour+9
+								
+								if month == '03' and int(date) > 12:
+									h = ht.hour+8
 								h_u = str(h+1)
 								print("Wait for map")
 								print("In file "+filenames[i]+":")
@@ -197,30 +199,34 @@ if apro =='y':
 									for flights_up in range(len(flight_data)-1):
 										dist = distance(seismo_latitudes[stations_up], seismo_longitudes[stations_up], flight_latitudes[flights_up], flight_longitudes[flights_up])
 										if dist <= 5:
-											htn = UTCDateTime(float(time[flights_up]))
-
-											#here you see spectrograms add flight data (ie. return type of plane, speed, altitude approximate arrival over station(plot as line on spectrogram
+											htn = str(UTCDateTime(float(time[flights_up])))
+											htnn = datetime.datetime.fromtimestamp(time[flights_up])
+											#here you see spectrograms add flight data (ie. return type of plane, speed, altitude approximate arrival over station(plot as line on spectrogram	
+											t = UTCDateTime(float(time[s]))
+											ht = datetime.datetime.fromtimestamp(time[s])
+											h = ht.hour+9
+											if month == '03' and int(date) > 12:
+												h = ht.hour+8
+											h_u = str(h+1)
+											
 											print("Station", sta[stations_up], "is", dist,"km away from the nearest time stamp at time "+htn)
 											
 											
 											#Label stations
 											plt.text(seismo_longitudes[stations_up], seismo_latitudes[stations_up], sta[stations_up], fontsize=5)
 											
-											plt.scatter(seismo_longitudes[stations_up], seismo_latitudes[stations_up], c='orange')
+											plt.scatter(seismo_longitudes[stations_up], seismo_latitudes[stations_up], c='pink')
 											#Label time stamps with epoch time
 											plt.text(flight_longitudes[flights_up], flight_latitudes[flights_up], htn, fontsize=5)
 											plt.scatter(flight_longitudes[flights_up], flight_latitudes[flights_up], c='orange')
 											xx = np.vstack([seismo_longitudes[stations_up], seismo_latitudes[stations_up]])
-											yy = np.vstack([flight_longitudes[s],flight_latitudes[s]])
-											plt.plot(xx,yy, '--', c='orange')
+											yy = np.vstack([flight_longitudes[flights_up],flight_latitudes[flights_up]])
+											plt.plot(xx,yy, '-.', c='orange')
 
-								min_lon = -162.5
-								max_lon = -142.0
-								min_lat = 50
-								max_lat = 68
+								
 								# Set labels and title
-								plt.xlim(min_lon, max_lon)
-								plt.ylim(min_lat, max_lat)
+								plt.xlim(-153, -142)
+								plt.ylim(60, 65)
 								plt.xlabel('Longitude')
 								plt.ylabel('Latitude')
 								plt.title(filenames[i])	
@@ -233,7 +239,7 @@ if apro =='y':
 									n = "/scratch/naalexeev/NODAL/2019-"+month+"-"+day+"T"+str(h)+":00:00.000000Z.2019-"+month+"-"+day+"T"+h_u+":00:00.000000Z."+str(sta_spec)+".mseed"
 									if os.path.isfile(n):
 										tr = obspy.read(n)
-										tr.trim(int(str(ht.min))*60-300, int(str(ht.min))*60 + 300)
+										tr.trim(tr[2].stats.starttime + int(str(htnn.minute))*60 - 300+int(str(htnn.second)), tr[2].stats.starttime + int(str(htnn.minute))*60 + 300+int(str(htnn.second)))
 										fig1, ax1 = plt.subplots()
 										#fig1.set_figwidth(5.0)
 										#fig1.set_figheight(4.0)
@@ -248,7 +254,8 @@ if apro =='y':
 											print("The plane is traveling at an altitude of", alt[s], "at ", speed[s] ,"km per hour.")
 
 									spect = input("Would you like to view another station? (y or n)")
-								x = 't'
+									x = 'x'
+						x = 't'
 							
 #print map+station+distance between them+predicted arrival times use pysep to create record section of plane arrival on stations near by	 
 if apro == 'n':
