@@ -143,7 +143,7 @@ for filename in os.listdir(directory):
 	# checking if it is a file
 	if os.path.isfile(f):
 		flight_files.append(f)
-apro = input("Do you want to plot only timestamps that are 10km or less from the array? (y or n)")
+apro = input("Do you want to plot only timestamps that are 5km or less from the array? (y or n)")
 
 color=[]
 #Read in color text file to get different flights to be diffrent colors on map
