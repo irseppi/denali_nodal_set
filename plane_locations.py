@@ -170,92 +170,122 @@ if apro =='y':
 		time = flight_data['snapshot_id']
 		speed = flight_data['speed']
 		alt = flight_data['altitude']
-		x = 'h'
+		print("Wait for map")
+		for s in range(len(flight_data)-1):
+			for l in range(len(seismo_data)):
+				if sstations <= sta[l] <= estations:
+					
+					station = str(sta[l])
+					dist = distance(seismo_latitudes[l], seismo_longitudes[l], flight_latitudes[s], flight_longitudes[s])
+					print('...')
+					if dist <= 5:
+						
+						if s_epoch <= int(time[s]) <= e_epoch and min_lat <= flight_latitudes[s] <= max_lat and min_lon <= flight_longitudes[s] <= max_lon:
+							t = UTCDateTime(float(time[s]))
+							ht = datetime.datetime.fromtimestamp(time[s])
 
-		while x == 'h': 
-			for s in range(len(flight_data)-1):
-				for l in range(len(seismo_data)):
-					if sstations <= sta[l] <= estations:
-						station = str(sta[l])
-						dist = distance(seismo_latitudes[l], seismo_longitudes[l], flight_latitudes[s], flight_longitudes[s])
-						if dist <= 5:
-							if s_epoch <= int(time[s]) <= e_epoch and min_lat <= flight_latitudes[s] <= max_lat and min_lon <= flight_longitudes[s] <= max_lon:
-								t = UTCDateTime(float(time[s]))
-								ht = datetime.datetime.fromtimestamp(time[s])
+							if month == '03' and int(day) > 10:
+								h = ht.hour+8
+							else: 
 								h = ht.hour+9
-								
-								if month == '03' and int(date) > 12:
-									h = ht.hour+8
+							h_u = str(h+1)
+							
+							print("In file "+filenames[i]+":")
+							fig = plt.figure()
+							# Create a scatter plot for the seismometer locations
+							for sd in range(len(seismo_data)):
+								plt.scatter(seismo_longitudes[sd], seismo_latitudes[sd], c='red')
+							#plt.scatter(flight_longitudes, flight_latitudes, 'o-',c='blue')
+							for fd in range(len(flight_data)-1):
+								plt.scatter(flight_longitudes[fd], flight_latitudes[fd], c=color[i % len(color)])
+					
+							for stations_up in range(len(seismo_data)):
+								for flights_up in range(len(flight_data)-1):
+									dist = distance(seismo_latitudes[stations_up], seismo_longitudes[stations_up], flight_latitudes[flights_up], flight_longitudes[flights_up])
+									if dist <= 5:
+										htn = str(UTCDateTime(float(time[flights_up])))
+										htnn = datetime.datetime.fromtimestamp(time[flights_up])
+										
+										print("Station", sta[stations_up], "is", dist,"km away from the nearest time stamp at time "+htn)
+										
+										
+										#Label stations
+										plt.text(seismo_longitudes[stations_up], seismo_latitudes[stations_up], sta[stations_up], fontsize=5)
+										
+										plt.scatter(seismo_longitudes[stations_up], seismo_latitudes[stations_up], c='pink')
+										#Label time stamps with epoch time
+										plt.text(flight_longitudes[flights_up], flight_latitudes[flights_up], htn, fontsize=5)
+										plt.scatter(flight_longitudes[flights_up], flight_latitudes[flights_up], c='orange')
+										xx = np.vstack([seismo_longitudes[stations_up], seismo_latitudes[stations_up]])
+										yy = np.vstack([flight_longitudes[flights_up],flight_latitudes[flights_up]])
+										
+									else:
+										continue
+											
+							plt.plot(xx,yy, '-.', c='orange')
+							# Set labels and title
+							plt.xlim(-153, -142)
+							plt.ylim(60, 65)
+							plt.xlabel('Longitude')
+							plt.ylabel('Latitude')
+							plt.title(filenames[i])	
+							plt.show(block=False)
+							
+							spect = input("Do you want to see a spectrogram? (y or n)")
+							#add arival over location here
+							#here you see spectrograms add flight data (ie. return type of plane, speed, altitude approximate arrival over station(plot as line on spectrogram
+							while spect =='y':
+								sta_spec = input("What station do you want to see a spectrogram of?")
+								stations_up = int(int(sta_spec)-1000)
+								index_on = 0
+								dist_on = 100
+								for flights_up in range(len(flight_data)-1):
+									dist = distance(seismo_latitudes[stations_up], seismo_longitudes[stations_up], flight_latitudes[flights_up], flight_longitudes[flights_up])
+									if dist < dist_on:
+										dist_on = dist
+										index_on = flights_up
+									else:
+										continue
+								htn = str(UTCDateTime(float(time[index_on])))
+								htnn = datetime.datetime.fromtimestamp(time[index_on])
+								if month == '03' and int(day) > 10:
+									h = htnn.hour+8
+								else: 
+									h = htnn.hour+9
 								h_u = str(h+1)
-								print("Wait for map")
-								print("In file "+filenames[i]+":")
-								fig = plt.figure()
-								# Create a scatter plot for the seismometer locations
-								for sd in range(len(seismo_data)):
-									plt.scatter(seismo_longitudes[sd], seismo_latitudes[sd], c='red')
-								for fd in range(len(flight_data)-1):
-									plt.scatter(flight_longitudes[fd], flight_latitudes[fd], c=color[i % len(color)])
-								for stations_up in range(len(seismo_data)):
-									for flights_up in range(len(flight_data)-1):
-										dist = distance(seismo_latitudes[stations_up], seismo_longitudes[stations_up], flight_latitudes[flights_up], flight_longitudes[flights_up])
-										if dist <= 5:
-											htn = str(UTCDateTime(float(time[flights_up])))
-											htnn = datetime.datetime.fromtimestamp(time[flights_up])
-											#here you see spectrograms add flight data (ie. return type of plane, speed, altitude approximate arrival over station(plot as line on spectrogram	
-											t = UTCDateTime(float(time[s]))
-											ht = datetime.datetime.fromtimestamp(time[s])
-											h = ht.hour+9
-											if month == '03' and int(date) > 12:
-												h = ht.hour+8
-											h_u = str(h+1)
-											
-											print("Station", sta[stations_up], "is", dist,"km away from the nearest time stamp at time "+htn)
-											
-											
-											#Label stations
-											plt.text(seismo_longitudes[stations_up], seismo_latitudes[stations_up], sta[stations_up], fontsize=5)
-											
-											plt.scatter(seismo_longitudes[stations_up], seismo_latitudes[stations_up], c='pink')
-											#Label time stamps with epoch time
-											plt.text(flight_longitudes[flights_up], flight_latitudes[flights_up], htn, fontsize=5)
-											plt.scatter(flight_longitudes[flights_up], flight_latitudes[flights_up], c='orange')
-											xx = np.vstack([seismo_longitudes[stations_up], seismo_latitudes[stations_up]])
-											yy = np.vstack([flight_longitudes[flights_up],flight_latitudes[flights_up]])
-											plt.plot(xx,yy, '-.', c='orange')
+								n = "/scratch/naalexeev/NODAL/2019-"+month+"-"+day+"T"+str(h)+":00:00.000000Z.2019-"+month+"-"+day+"T"+h_u+":00:00.000000Z."+str(sta_spec)+".mseed"
+								if os.path.isfile(n):
+									
+									tr = obspy.read(n)
+									tr.trim(tr[2].stats.starttime + int(str(htnn.minute))*60 - 60+int(str(htnn.second)), tr[2].stats.starttime + int(str(htnn.minute))*60 + 60+int(str(htnn.second)))
+									fig1, ax1 = plt.subplots()
+									#fig1.set_figwidth(5.0)
+									#fig1.set_figheight(4.0)
+									#ax1.set_ylim([0, 100])
+									#fig1.axvline(tr[2].stats.starttime + int(str(htnn.minute)), '-', c = 'black')
+									tr[2].spectrogram(axes = ax1,log=False,dbscale=True,cmap='hsv')
+									fig1.show()
 
-								
-								# Set labels and title
-								plt.xlim(-153, -142)
-								plt.ylim(60, 65)
-								plt.xlabel('Longitude')
-								plt.ylabel('Latitude')
-								plt.title(filenames[i])	
-								plt.show(block=False)
-								
-								spect = input("Do you want to see a spectrogram? (y or n)")
-								#add arival over location here
-								while spect =='y':
-									sta_spec = input("What station do you want to see a spectrogram of?")
-									n = "/scratch/naalexeev/NODAL/2019-"+month+"-"+day+"T"+str(h)+":00:00.000000Z.2019-"+month+"-"+day+"T"+h_u+":00:00.000000Z."+str(sta_spec)+".mseed"
-									if os.path.isfile(n):
-										tr = obspy.read(n)
-										tr.trim(tr[2].stats.starttime + int(str(htnn.minute))*60 - 300+int(str(htnn.second)), tr[2].stats.starttime + int(str(htnn.minute))*60 + 300+int(str(htnn.second)))
-										fig1, ax1 = plt.subplots()
-										#fig1.set_figwidth(5.0)
-										#fig1.set_figheight(4.0)
-										#ax1.set_ylim([0, 100])
-										tr[2].spectrogram(axes = ax1,log=False,dbscale=True,cmap='hsv')
-										fig1.show()
-
-										# Show the plot
-										tr[2].plot()
-										stat = input("Do you want to see stats for the nearest timestamps? (y or n)")
-										if stat == 'y':
-											print("The plane is traveling at an altitude of", alt[s], "at ", speed[s] ,"km per hour.")
-
-									spect = input("Would you like to view another station? (y or n)")
-									x = 'x'
-						x = 't'
+									# Show the plot
+									tr[2].plot()
+									stat = input("Do you want to see stats for the nearest timestamps? (y or n)")
+									if stat == 'y':
+										print("The plane is traveling at an altitude of", alt[s], "at ", speed[s] ,"km per hour.")
+								else:
+									print('No data for this station')
+								spect = input("Would you like to view another station? (y or n)")
+							break
+						else:
+							continue
+						break
+						
+					else:
+						continue
+				else:
+					continue
+			break
+							
+						
 							
 #print map+station+distance between them+predicted arrival times use pysep to create record section of plane arrival on stations near by	 
 if apro == 'n':
@@ -278,9 +308,6 @@ if apro == 'n':
 				plt.text(flight_longitudes[s]+.1, flight_latitudes[s]+.1, speed[s], fontsize=5)
 				plt.text(flight_longitudes[s]-.1, flight_latitudes[s]-.1, alt[s], fontsize=5)
 				 
-
-		
-	
 
 	# Set labels and title
 	plt.xlim(min_lon, max_lon)
