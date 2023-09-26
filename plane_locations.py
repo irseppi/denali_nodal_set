@@ -30,20 +30,8 @@ def calc_time(t,l, vo, c):
 	c = 0.343
 	to=t+(sqrt(l**2+(vo*t)**2))/c
 	return to
-#def calc_freq(t,l, vo, c, tr, )):
-#to=calc_time(t,l, vo, c)
-#fo=obspy.signal.freqattributes.central_frequency(tr, 500, , ,)
-#c = 0.343
-#find if the plane is moving toards or away
-#if towards == True:
-#fo = vo/(vo-c)
-#if away == True:
-#fo = vo/(vo-c)
 
 
-#f=fo*(1/(1+((vo/c)*(vo*to/sqrt(l**2+(vo*to)**2)
-#return f 
-#Pick date to view
 g ='g'
 while g == 'g':
 	month = str(input("What month do you want to view?(input as either 02 or 03)"))
