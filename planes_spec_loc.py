@@ -93,6 +93,9 @@ for i, flight_file in enumerate(flight_files):
 	speed = flight_data['speed']
 	alt = flight_data['altitude']
 
+	fname = filenames[i]	
+	flight_num = fname[8:19]
+
 	con = dist_less(flight_latitudes, flight_longitudes, seismo_latitudes, seismo_longitudes)
 	if con == True:	
 		# Create a scatter plot for the seismometer locations
@@ -100,69 +103,68 @@ for i, flight_file in enumerate(flight_files):
 			for fd in range(len(flight_data)):
 				dist = distance(seismo_latitudes[sd], seismo_longitudes[sd], flight_latitudes[fd], flight_longitudes[fd])
 				if dist <= 2:
-					station = str(sta[sd])
-					
-					ht = datetime.datetime.utcfromtimestamp(time[fd])
-							
-					h = ht.hour
-					month = ht.month
-					day = ht.day
-					mins = ht.minute
-					secs = ht.second
-					
-					month2 = str(month)
-					if month == 3 and day < 10:
-						day1 = '0'+str(day)
+						station = str(sta[sd])
+						ht = datetime.datetime.utcfromtimestamp(time[fd])
+						
+						h = ht.hour
+						month = ht.month
+						day = ht.day
+						mins = ht.minute
+						secs = ht.second
+						
+						month2 = str(month)
+						if month == 3 and day < 10:
+							day1 = '0'+str(day)
 
-					else:
-						day1 = str(day)
-
-					if h < 23:
-						h_u = str(h+1)			
-						day2 = day1
-					else:
-						h_u = '00'
-						if month == '02' and day == '28':
-							month2 = '03'
-							day2 = '01'
 						else:
-							day2 = str(day + 1)
+							day1 = str(day)
 
-					n = "/scratch/naalexeev/NODAL/2019-0"+str(month)+"-"+str(day)+"T"+str(h)+":00:00.000000Z.2019-0"+month2+"-"+day2+"T"+h_u+":00:00.000000Z."+station+".mseed"
-					
-					if os.path.isfile(n):
-						tr = obspy.read(n)
-						tim = 120 
-						tr[2].trim(tr[2].stats.starttime + (mins * 60) + secs - tim, tr[2].stats.starttime + (mins * 60) + secs +tim)
+						if h < 23:
+							h_u = str(h+1)			
+							day2 = day1
+						else:
+							h_u = '00'
+							if month == '02' and day == '28':
+								month2 = '03'
+								day2 = '01'
+							else:
+								day2 = str(day + 1)
 						
-						t                  = tr[2].times()
-						data               = tr[2].data
-						sampling_frequency = tr[2].stats.sampling_rate
-						tr_filt = tr[2].copy()
-						tr_filt.filter('highpass', freq=45, corners=2)
-
-						title    = f'{tr[2].stats.network}.{tr[2].stats.station}.{tr[2].stats.location}.{tr[2].stats.channel} − starting {tr[2].stats["starttime"]}'
+						n = "/scratch/naalexeev/NODAL/2019-0"+str(month)+"-"+str(day)+"T"+str(h)+":00:00.000000Z.2019-0"+month2+"-"+day2+"T"+h_u+":00:00.000000Z."+station+".mseed"
 						
-						fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8,6))     
+						if os.path.isfile(n):
+							tr = obspy.read(n)
+							tim = 120 
+							tr[2].trim(tr[2].stats.starttime + (mins * 60) + secs - tim, tr[2].stats.starttime + (mins * 60) + secs +tim)
+							
+							t                  = tr[2].times()
+							data               = tr[2].data
+							sampling_frequency = tr[2].stats.sampling_rate
+							tr_filt = tr[2].copy()
+							tr_filt.filter('highpass', freq=45, corners=2)
 
-						ax1.plot(t, tr_filt, 'k', linewidth=0.5)
-						ax1.set_title(title)
-						ax1.axvline(x=tim, c = 'r', ls = '--')
-					
-						s,f,tm,im = ax2.specgram(tr[2], Fs=sampling_frequency, noverlap=int(0.8*256), cmap='hsv')
-						ax2.set_xlabel('Time - Seconds')
-						ax2.axvline(x=tim, c = 'k', ls = '--')
+							title    = f'{tr[2].stats.network}.{tr[2].stats.station}.{tr[2].stats.location}.{tr[2].stats.channel} − starting {tr[2].stats["starttime"]}'
+							
+							fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8,6))     
+
+							ax1.plot(t, tr_filt, 'k', linewidth=0.5)
+							ax1.set_title(title)
+							ax1.axvline(x=tim, c = 'r', ls = '--')
 						
-					
+							s,f,tm,im = ax2.specgram(tr[2], Fs=sampling_frequency, noverlap=int(0.8*256), cmap='hsv')
+							ax2.set_xlabel('Time - Seconds')
+							ax2.axvline(x=tim, c = 'k', ls = '--')
+							
 						
-						ax2.set_ylabel('Frequency (Hz)')
+							
+							ax2.set_ylabel('Frequency (Hz)')
 
-						ax3 = fig.add_axes([0.9, 0.1, 0.03, 0.37])
+							ax3 = fig.add_axes([0.9, 0.1, 0.03, 0.37])
 
-						plt.colorbar(mappable=im, cax=ax3)
-						plt.ylabel('Relative Amplitude (dB)')
-
-						fig.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/spec_trace'+station+time[fd]+'_'+filenames[i]+'.png')
+							plt.colorbar(mappable=im, cax=ax3)
+							plt.ylabel('Relative Amplitude (dB)')
+							
+							fig.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/spec_trace'+station+time[fd]+flight_num+'png')
 						
 									
 							
