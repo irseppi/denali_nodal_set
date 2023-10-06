@@ -164,7 +164,7 @@ for i, flight_file in enumerate(flight_files):
 							plt.colorbar(mappable=im, cax=ax3)
 							plt.ylabel('Relative Amplitude (dB)')
 							
-							fig.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/spec_trace'+station+time[fd]+flight_num+'png')
+							fig.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/spec_trace'+station+str(time[fd])+flight_num+'png')
 						
 									
 							
