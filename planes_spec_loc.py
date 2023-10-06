@@ -132,12 +132,8 @@ for i, flight_file in enumerate(flight_files):
 					
 					if os.path.isfile(n):
 						tr = obspy.read(n)
-
-						t = 120 #time[fd]
-						l = math.sqrt(dist**2 + (alt[fd]/3281)**2)
-						
-						tr[2].trim(tr[2].stats.starttime + (mins * 60) + secs - 120, tr[2].stats.starttime + (mins * 60) + secs +120)
-						tim = 120
+						tim = 120 
+						tr[2].trim(tr[2].stats.starttime + (mins * 60) + secs - tim, tr[2].stats.starttime + (mins * 60) + secs +tim)
 						
 						t                  = tr[2].times()
 						data               = tr[2].data
@@ -174,7 +170,3 @@ for i, flight_file in enumerate(flight_files):
 					continue
 
 	print(i/len(flight_files), '% Done')		
-	
-		
-
-
