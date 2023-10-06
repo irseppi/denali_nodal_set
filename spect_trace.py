@@ -142,7 +142,6 @@ for i, flight_file in enumerate(flight_files):
 						else:
 							day2 = str(day + 1)
 							print(month2, day2, h_u) 
-					#2019-03-26T02:00:00.000000Z.2019-03-26T03:00:00.000000Z.1095.mseed
 
 					n = "/scratch/naalexeev/NODAL/2019-0"+str(month)+"-"+str(day)+"T"+str(h)+":00:00.000000Z.2019-0"+month2+"-"+day2+"T"+h_u+":00:00.000000Z."+station+".mseed"
 					print(n)
