@@ -103,7 +103,7 @@ for i, flight_file in enumerate(flight_files):
 	speed = flight_data['speed']
 	alt = flight_data['altitude']
 	fname = filenames[i]	
-	flight_num = fname[8:19]
+	flight_num = fname[:19]
 
 	con = dist_less(flight_latitudes, flight_longitudes, seismo_latitudes, seismo_longitudes)
 	if con == True:	
@@ -158,6 +158,6 @@ for i, flight_file in enumerate(flight_files):
 		plt.xlabel('Longitude')
 		plt.ylabel('Latitude')
 		plt.title(filenames[i])
-		plt.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/map'+flight_num+'png')
+		plt.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/map_'+flight_num+'png')
 
-	print(i/len(flight_files), '% Done')	
+	print(i/len(flight_files), '% Done')		
