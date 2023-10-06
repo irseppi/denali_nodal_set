@@ -102,6 +102,8 @@ for i, flight_file in enumerate(flight_files):
 	time = flight_data['snapshot_id']
 	speed = flight_data['speed']
 	alt = flight_data['altitude']
+	fname = filenames[i]	
+	flight_num = fname[8:19]
 
 	con = dist_less(flight_latitudes, flight_longitudes, seismo_latitudes, seismo_longitudes)
 	if con == True:	
@@ -147,7 +149,7 @@ for i, flight_file in enumerate(flight_files):
 					continue
 	
 		plt.text(flight_longitudes[index_p], flight_latitudes[index_p], time_use, fontsize=8)
-		t = 'At station '+str(sta[index_s])+': Speed '+str(speed[index_p])+'km/h at '+str(alt[index_p])+'ft'
+		t = 'At station '+str(sta[index_s])+': Speed '+str(speed[index_p])+'kts at '+str(alt[index_p])+'ft'
 		plt.text(-150.45, 64.5, t, fontsize = 20)
 
 		# Set labels and title
@@ -156,6 +158,6 @@ for i, flight_file in enumerate(flight_files):
 		plt.xlabel('Longitude')
 		plt.ylabel('Latitude')
 		plt.title(filenames[i])
-		plt.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/map_'+filenames[i]+'.png')
+		plt.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/map'+flight_num+'png')
 
-	print(i/len(flight_files), '% Done')		
+	print(i/len(flight_files), '% Done')	
