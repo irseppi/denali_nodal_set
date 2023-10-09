@@ -9,6 +9,17 @@ import datetime
 import pytz
 import obspy
 import math 
+from pathlib import Path
+
+def make_base_dir(base_dir):
+	base_dir = Path(base_dir)
+	if not base_dir.exists():
+		current_path = Path("/")
+		for parent in base_dir.parts:
+			current_path = current_path/parent
+			if not current_path.exists():
+				current_path.mkdir()
+
 
 def distance(lat1, lon1, lat2, lon2):
 	dist = gps2dist_azimuth(lat1, lon1, lat2, lon2)
@@ -48,10 +59,10 @@ seismo_longitudes = seismo_data['Longitude']
 seismo_stations = seismo_data['Latitude']
 sta = seismo_data['Station']
 
-for month in (2,4):
+for month in range(2,4):
 	if month == 2:
 		month = '02'
-		for day in range(11,29):
+		for day in range(24,29):
 			day = str(day)
 			# assign directory
 			directory = '/scratch/irseppi/nodal_data/flightradar24/2019'+month+day+'_positions'
@@ -158,6 +169,11 @@ for i, flight_file in enumerate(flight_files):
 		plt.xlabel('Longitude')
 		plt.ylabel('Latitude')
 		plt.title(filenames[i])
-		plt.savefig('/scratch/irseppi/nodal_data/Plane_map_spec/map_'+flight_num+'png')
+		mon = str(flight_num[4:6])
+		da = str(flight_num[6:8])
+		BASE_DIR = "/scratch/irseppi/nodal_data/Plane_info/Plane_map/2019-"+mon+"-"+da
+		make_base_dir(BASE_DIR)
+						
+		plt.savefig('/scratch/irseppi/nodal_data/Plane_info/Plane_map/2019-'+mon+'-'+da+'/map_'+flight_num+'png')
 
-	print(i/len(flight_files), '% Done')		
+	print(i/len(flight_files), '% Done')	
