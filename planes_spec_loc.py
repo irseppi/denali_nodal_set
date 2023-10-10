@@ -69,7 +69,7 @@ for month in range(2,4):
 					flight_files.append(f)
 	elif month == 3:
 		month = '03'
-		for day in range(1, 26):
+		for day in range(1, 27):
 			if day < 10:
 				day = '0' + str(day)
 				# assign directory
