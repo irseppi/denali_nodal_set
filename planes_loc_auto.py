@@ -62,7 +62,7 @@ sta = seismo_data['Station']
 for month in range(2,4):
 	if month == 2:
 		month = '02'
-		for day in range(24,29):
+		for day in range(11,29):
 			day = str(day)
 			# assign directory
 			directory = '/scratch/irseppi/nodal_data/flightradar24/2019'+month+day+'_positions'
