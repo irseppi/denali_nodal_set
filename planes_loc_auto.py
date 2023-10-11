@@ -176,4 +176,4 @@ for i, flight_file in enumerate(flight_files):
 						
 		plt.savefig('/scratch/irseppi/nodal_data/Plane_info/Plane_map/2019-'+mon+'-'+da+'/map_'+flight_num+'png')
 
-	print(i/len(flight_files), '% Done')	
+	print((i/len(flight_files))*100, '% Done')	
