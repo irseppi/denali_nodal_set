@@ -69,7 +69,7 @@ for month in range(2,4):
 					flight_files.append(f)
 	elif month == 3:
 		month = '03'
-		for day in range(1, 27):
+		for day in range(1, 26):
 			if day < 10:
 				day = '0' + str(day)
 				# assign directory
@@ -147,42 +147,44 @@ for i, flight_file in enumerate(flight_files):
 						
 						if os.path.isfile(n):
 							tr = obspy.read(n)
-							tim = 120 
-							tr[2].trim(tr[2].stats.starttime + (mins * 60) + secs - tim, tr[2].stats.starttime + (mins * 60) + secs +tim)
-							
-							t                  = tr[2].times()
-							data               = tr[2].data
-							sampling_frequency = tr[2].stats.sampling_rate
-							tr_filt = tr[2].copy()
-							tr_filt.filter('highpass', freq=45, corners=2)
+							try:
+								tim = 120 
+								tr[2].trim(tr[2].stats.starttime + (mins * 60) + secs - tim, tr[2].stats.starttime + (mins * 60) + secs +tim)
+								
+								t                  = tr[2].times()
+								data               = tr[2].data
+								sampling_frequency = tr[2].stats.sampling_rate
+								tr_filt = tr[2].copy()
+								tr_filt.filter('highpass', freq=45, corners=2)
 
-							title    = f'{tr[2].stats.network}.{tr[2].stats.station}.{tr[2].stats.location}.{tr[2].stats.channel} − starting {tr[2].stats["starttime"]}'
-							
-							fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8,6))     
+								title    = f'{tr[2].stats.network}.{tr[2].stats.station}.{tr[2].stats.location}.{tr[2].stats.channel} − starting {tr[2].stats["starttime"]}'
+								
+								fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(8,6))     
 
-							ax1.plot(t, tr_filt, 'k', linewidth=0.5)
-							ax1.set_title(title)
-							ax1.axvline(x=tim, c = 'r', ls = '--')
+								ax1.plot(t, tr_filt, 'k', linewidth=0.5)
+								ax1.set_title(title)
+								ax1.axvline(x=tim, c = 'r', ls = '--')
+							
+								s,f,tm,im = ax2.specgram(tr[2], Fs=sampling_frequency, noverlap=int(0.8*256), cmap='hsv')
+								ax2.set_xlabel('Time - Seconds')
+								ax2.axvline(x=tim, c = 'k', ls = '--')
+								
+							
+								
+								ax2.set_ylabel('Frequency (Hz)')
+
+								ax3 = fig.add_axes([0.9, 0.1, 0.03, 0.37])
+
+								plt.colorbar(mappable=im, cax=ax3)
+								plt.ylabel('Relative Amplitude (dB)')
+								BASE_DIR = "/scratch/irseppi/nodal_data/Plane_info/Plane_spec/2019-0"+str(month)+"-"+str(day)+"/"+flight_num+ '/'+station
+								make_base_dir(BASE_DIR)
+								fig.savefig('/scratch/irseppi/nodal_data/Plane_info/Plane_spec/2019-0'+str(month)+'-'+str(day)+'/'+flight_num + '/'+station+'/'+str(time[fd])+'_'+flight_num+'.png')
 						
-							s,f,tm,im = ax2.specgram(tr[2], Fs=sampling_frequency, noverlap=int(0.8*256), cmap='hsv')
-							ax2.set_xlabel('Time - Seconds')
-							ax2.axvline(x=tim, c = 'k', ls = '--')
-							
-						
-							
-							ax2.set_ylabel('Frequency (Hz)')
-
-							ax3 = fig.add_axes([0.9, 0.1, 0.03, 0.37])
-
-							plt.colorbar(mappable=im, cax=ax3)
-							plt.ylabel('Relative Amplitude (dB)')
-							BASE_DIR = "/scratch/irseppi/nodal_data/Plane_info/Plane_spec/2019-0"+str(month)+"-"+str(day)+"/"+flight_num
-							make_base_dir(BASE_DIR)
-							fig.savefig('/scratch/irseppi/nodal_data/Plane_info/Plane_spec/2019-0'+str(month)+'-'+str(day)+'/'+flight_num + '/'+station+'_'+str(time[fd])+'_'+flight_num+'.png')
-						
-									
+							except:
+								continue		
 							
 				else:
 					continue
 
-	print(i/len(flight_files), '% Done')		
+	print(i/len(flight_files)*100, '% Done')	
