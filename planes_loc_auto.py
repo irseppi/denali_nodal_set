@@ -49,9 +49,6 @@ max_lat = 64.6
 flight_files=[]
 filenames = []
 
-color=[]
-
-
 # Load the seismometer location data
 seismo_data = pd.read_csv('nodes_stations.txt', sep="|")
 seismo_latitudes = seismo_data['Latitude']
